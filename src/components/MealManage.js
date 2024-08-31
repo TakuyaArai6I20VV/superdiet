@@ -21,27 +21,28 @@ const MealManage = () => {
   });
   const [userId, setUserId] = useState(null);
 
-  // Navigate to root
   const handleRoot = () => {
     navigate("/");
   };
 
-  // Toggle modal visibility
   const ShowModal = () => {
     setShowModal(!showModal);
   };
 
-  // Fetch current user ID
-  const fetchUserId = useCallback(async () => {
-    const { data: session, error } = await supabase.auth.getSession();
+  // Fetch user ID from Supabase
+  const fetchUserId = async () => {
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.getSession();
     if (error) {
       console.error("Error fetching session:", error);
       return;
     }
-    setUserId(session?.session?.user?.id || null);
-  }, []);
+    const id = session?.user?.id || null;
+    setUserId(id);
+  };
 
-  // Fetch totals for today
   const fetchTotals = useCallback(async () => {
     if (!userId) {
       console.error("userId is required");
@@ -50,7 +51,6 @@ const MealManage = () => {
 
     const today = new Date().toISOString().split("T")[0]; // Format as YYYY-MM-DD
 
-    // Fetch data for today for the given user_id
     const { data, error } = await supabase
       .from("meal")
       .select("suger, fat, protein, calorie")
@@ -63,13 +63,12 @@ const MealManage = () => {
       return;
     }
 
-    // Calculate totals
     const totals = data.reduce(
       (acc, item) => {
-        acc.suger += item.suger || 0;
-        acc.fat += item.fat || 0;
-        acc.protein += item.protein || 0;
-        acc.calorie += item.calorie || 0;
+        acc.suger += item.suger;
+        acc.fat += item.fat;
+        acc.protein += item.protein;
+        acc.calorie += item.calorie;
         return acc;
       },
       { suger: 0, fat: 0, protein: 0, calorie: 0 }
@@ -78,16 +77,26 @@ const MealManage = () => {
     setTotals(totals);
   }, [userId]);
 
-  // Fetch userId and totals when component mounts
   useEffect(() => {
     fetchUserId();
-  }, [fetchUserId]);
+  }, []);
 
   useEffect(() => {
     if (userId) {
       fetchTotals();
     }
-  }, [fetchTotals, userId]);
+  }, [userId, fetchTotals]);
+
+  const maxValues = {
+    suger: 380,
+    fat: 75,
+    protein: 65,
+    calorie: 2650,
+  };
+
+  const calculatePercentage = (value, max) => {
+    return ((value / max) * 100).toFixed(1);
+  };
 
   return (
     <>
@@ -98,31 +107,126 @@ const MealManage = () => {
       <div className="flex flex-col items-center gap-6 mb-6">
         <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-lg">
           <h2 className="text-2xl font-semibold mb-4">今日の合計</h2>
-          <ul className="space-y-2">
-            <li className="flex justify-between text-lg">
-              糖質:
-              <span className="font-medium">{totals.suger} g</span>
-            </li>
-            <li className="flex justify-between text-lg">
-              脂質:
-              <span className="font-medium">{totals.fat} g</span>
-            </li>
-            <li className="flex justify-between text-lg">
-              タンパク質:
-              <span className="font-medium">{totals.protein} g</span>
-            </li>
-            <li className="flex justify-between text-lg">
-              カロリー:
-              <span className="font-medium">{totals.calorie} kcal</span>
-            </li>
-          </ul>
+          <div className="grid grid-cols-2 gap-6">
+            {Object.entries(totals).map(([key, value]) => (
+              <div key={key} className="flex flex-col items-center">
+                <div className="relative w-32 h-32">
+                  <svg
+                    className="absolute inset-0 w-full h-full"
+                    viewBox="0 0 100 100"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    {/* Outer circle (goal) */}
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="45"
+                      stroke="gray"
+                      strokeWidth="10"
+                      fill="none"
+                    />
+                    {/* Inner circle (progress) */}
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="45"
+                      stroke={
+                        key === "calorie"
+                          ? "#F97316"
+                          : key === "suger"
+                          ? "#60A5FA"
+                          : key === "fat"
+                          ? "#F43F5E"
+                          : "#22D3EE"
+                      }
+                      strokeWidth="10"
+                      strokeDasharray={`${
+                        2 *
+                        Math.PI *
+                        45 *
+                        (calculatePercentage(value, maxValues[key]) / 100)
+                      } ${
+                        2 *
+                        Math.PI *
+                        45 *
+                        (1 - calculatePercentage(value, maxValues[key]) / 100)
+                      }`}
+                      strokeLinecap="round"
+                      fill="none"
+                      transform="rotate(-90 50 50)"
+                    />
+                    {/* Center text */}
+                    <text
+                      x="50%"
+                      y="50%"
+                      textAnchor="middle"
+                      dy="-0.3em"
+                      className="text-lg font-semibold"
+                    >
+                      {value}
+                    </text>
+                    <text
+                      x="50%"
+                      y="55%"
+                      textAnchor="middle"
+                      className="text-xs"
+                    >
+                      {key === "calorie" ? "kcal" : "g"}
+                    </text>
+                  </svg>
+                </div>
+                <span className="mt-2 text-lg font-medium">
+                  {key === "suger"
+                    ? "糖質"
+                    : key === "fat"
+                    ? "脂質"
+                    : key === "protein"
+                    ? "タンパク質"
+                    : "カロリー"}
+                </span>
+                <div className="w-32 mt-4 relative">
+                  <div
+                    className="absolute inset-0 bg-gray-200 rounded-lg"
+                    style={{
+                      width: "100%",
+                      height: "8px",
+                      backgroundColor: "#e2e8f0",
+                      borderRadius: "4px",
+                      border: "2px solid lightgray",
+                    }}
+                  />
+                  <div
+                    className="absolute inset-0 rounded-lg"
+                    style={{
+                      width: "100%",
+                      height: "8px",
+                      backgroundColor:
+                        calculatePercentage(value, maxValues[key]) > 100
+                          ? "red"
+                          : "#60A5FA",
+                      borderRadius: "4px",
+                      transform: `scaleX(${Math.min(
+                        calculatePercentage(value, maxValues[key]) / 100,
+                        1
+                      )})`,
+                      transformOrigin: "left",
+                      transition: "background-color 0.3s",
+                    }}
+                  />
+                </div>
+                <span className="mt-2 text-sm">
+                  目安: {maxValues[key]} {key === "calorie" ? "kcal" : "g"}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
 
         <button
           onClick={ShowModal}
           className="bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 text-white font-medium rounded-lg text-sm px-6 py-3 shadow-lg transition duration-200"
         >
-          食事入力
+          摂取した栄養を入力
         </button>
         <button
           onClick={handleRoot}
