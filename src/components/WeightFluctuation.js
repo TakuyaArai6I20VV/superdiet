@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto'; // Chart.jsの自動インポート
+import { Container, TextField, Button, Typography, Box, List, ListItem } from '@mui/material';
+import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper } from '@mui/material';
 
 // Set up your Supabase client
 const supabaseUrl = 'https://qwhxtyfsbwiwcyemzsub.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3aHh0eWZzYndpd2N5ZW16c3ViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjUwNzE1MDAsImV4cCI6MjA0MDY0NzUwMH0.y-zwrkkULuts7hurqiuDCV0eRByn8YUqd2N8QdD4unE';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3aHh0eWZzYndpd2N5ZW16c3ViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjUwNzE1MDAsImV4cCI6MjA0MDY0NzUwMH0.y-zwrkkULuts7hurqiuDCV0eRByn8YUqd2N8QdD4unE'; // セキュリティのためにAPIキーは環境変数に格納するのが推奨です。
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const WeightFluctuation = () => {
@@ -30,7 +32,6 @@ const WeightFluctuation = () => {
         setUUID(user.id);
       }
     };
-
 
     fetchData();
   }, []);
@@ -69,6 +70,11 @@ const WeightFluctuation = () => {
   };
 
   const chartOptions = {
+    plugins: {
+        legend: {
+          display: false, // ラベルを表示しない
+        },
+    },
     scales: {
       x: {
         title: {
@@ -91,32 +97,60 @@ const WeightFluctuation = () => {
   };
 
   return (
-    <div>
-      <h2>体重変動</h2>
-      <div>
-        <input
-          type="text"
+    <Container>
+      <Typography variant="h4" gutterBottom>
+        体重変動
+      </Typography>
+      <Box mb={2}>
+        <TextField
+          label="体重を入力"
+          variant="outlined"
           value={weight}
           onChange={(e) => setWeight(e.target.value)}
-          placeholder="Enter weight"
+          fullWidth
         />
-        <button onClick={addWeight}>Add Weight</button>
-      </div>
-      <div>
-        <h3>Weight History</h3>
-        <ul>
-          {data.map((entry) => (
-            <li key={entry.date}>
-              {entry.date}: {entry.weight} kg
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div style={{ width: '600px', height: '400px' }}>
-        <h3>体重履歴</h3>
-        <Line data={chartData} options={chartOptions} />
-      </div>
-    </div>
+      </Box>
+      <Box mb={4}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={addWeight}
+          fullWidth
+        >
+          体重を追加
+        </Button>
+      </Box>
+      <Typography variant="h6" gutterBottom>
+            体重履歴
+          </Typography>
+      <Box display="flex" justifyContent="space-between" mb={4}>
+        <Box flex={1} mr={2}>
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Date</TableCell>
+                            <TableCell align="right">Weight (kg)</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                    {data.map((entry) => (
+                        <TableRow key={entry.date}>
+                            <TableCell>{entry.date}</TableCell>
+                            <TableCell align="right">{entry.weight} kg</TableCell>
+                        </TableRow>
+                    ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Box>
+        <Box flex={2}>
+          <Box sx={{ width: '100%', height: '400px' }}>
+            <Line data={chartData} options={chartOptions} />
+          </Box>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 
