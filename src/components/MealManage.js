@@ -1,5 +1,30 @@
+import { useNavigate } from "react-router-dom";
+import Modal from "./MealInputModal/Modal";
+import { useState } from "react";
+
 const MealManage = () => {
-  return <div>食事管理</div>
+  const navigate = useNavigate();
+  const handleRoot = () => {
+    navigate("/");
+  };
+
+  const [showModal, setShowModal] = useState(false);
+
+  const ShowModal = () => {
+    setShowModal(!showModal);
+  }
+
+  return (
+  <div>
+    食事管理
+    <div className="meal-input">
+      <button onClick={ShowModal}>食事入力</button>
+      <Modal showFlag={showModal} setShowModal={setShowModal}/>
+    </div>
+
+    <button onClick={handleRoot}>戻る</button>
+  </div>
+  )
 };
 
 export default MealManage;
