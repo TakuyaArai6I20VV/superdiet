@@ -6,6 +6,9 @@ const Home = () => {
   const handleHome = () => {
     navigate("/Home");
   };
+  const handleLogin = () => {
+    navigate("/Login");
+  };
   const handleSetting = () => {
     navigate("/Setting");
   };
@@ -22,6 +25,7 @@ const Home = () => {
   return (
     <>
       <button onClick={handleHome}>ホーム</button>
+      <button onClick={handleLogin}>ログイン</button>
       <button onClick={handleWeight}>体重変動</button>
       <button onClick={handleMeal}>食事管理</button>
       <button onClick={handleExercise}>運動入力</button>
