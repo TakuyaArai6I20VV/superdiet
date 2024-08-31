@@ -117,10 +117,10 @@ const Home = () => {
             <ListItem button component={Link} to="/login">
               <ListItemText primary="ログイン" />
             </ListItem>
-            <ListItem button component={Link} to="/weight-fluctuation">
+            <ListItem button component={Link} to="/weightFluctuation">
               <ListItemText primary="体重変動" />
             </ListItem>
-            <ListItem button component={Link} to="/meal-manage">
+            <ListItem button component={Link} to="/mealManage">
               <ListItemText primary="食事管理" />
             </ListItem>
             <ListItem button component={Link} to="/exercise">
