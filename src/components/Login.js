@@ -1,6 +1,9 @@
 // src/Login.jsx
 import { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
+import { useNavigate } from "react-router-dom";
+
+import Layout from '../Layout';
 
 const supabaseUrl = 'https://qwhxtyfsbwiwcyemzsub.supabase.co';
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3aHh0eWZzYndpd2N5ZW16c3ViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjUwNzE1MDAsImV4cCI6MjA0MDY0NzUwMH0.y-zwrkkULuts7hurqiuDCV0eRByn8YUqd2N8QdD4unE';
@@ -11,6 +14,7 @@ const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   // ログイン・ユーザー登録を行う
   const handleAuth = async (e) => {
@@ -30,12 +34,15 @@ const Login = () => {
         });
         if (error) throw error;
       }
+      navigate("/WeightFluctuation");
     } catch (error) {
       alert(error);
     }
   };
 
   return (
+    <>
+    <Layout />
     <div style={{ textAlign: "center" }}>
       <div>
         <h1>ログイン</h1>
@@ -67,6 +74,7 @@ const Login = () => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 
