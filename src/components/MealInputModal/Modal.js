@@ -1,12 +1,10 @@
-import { createClient } from "@supabase/supabase-js";
 import { useState } from "react";
+import { createClient } from "@supabase/supabase-js";
 
-// Set up your Supabase client
 const supabaseUrl = "https://qwhxtyfsbwiwcyemzsub.supabase.co";
 const supabaseKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3aHh0eWZzYndpd2N5ZW16c3ViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjUwNzE1MDAsImV4cCI6MjA0MDY0NzUwMH0.y-zwrkkULuts7hurqiuDCV0eRByn8YUqd2N8QdD4unE";
 const supabase = createClient(supabaseUrl, supabaseKey);
-
 
 const Modal = (props) => {
   const [suger, setSuger] = useState(0);
@@ -19,19 +17,19 @@ const Modal = (props) => {
   };
 
   const onSugerChange = (e) => {
-    setSuger(e.target.value);
+    setSuger(parseInt(e.target.value, 10) || 0);
   };
 
   const onFatChange = (e) => {
-    setFat(e.target.value);
+    setFat(parseInt(e.target.value, 10) || 0);
   };
 
   const onProteinChange = (e) => {
-    setProtein(e.target.value);
+    setProtein(parseInt(e.target.value, 10) || 0);
   };
 
   const onCalorieChange = (e) => {
-    setCalorie(e.target.value);
+    setCalorie(parseInt(e.target.value, 10) || 0);
   };
 
   const onSubmit = async (e) => {
@@ -41,72 +39,90 @@ const Modal = (props) => {
     console.log("タンパク質：", protein);
     console.log("カロリー：", calorie);
 
-    const { error } = await supabase
-      .from('meal')
-      .insert([
-        { suger: suger, fat: fat, protein: protein, calorie: calorie },
-      ])
+    const { data, error } = await supabase
+      .from("meal")
+      .insert([{ suger: suger, fat: fat, protein: protein, calorie: calorie }])
       .select();
+
+    if (error) {
+      console.error("データの挿入に失敗しました:", error);
+    } else {
+      console.log("データが挿入されました:", data);
+      closeModal();
+    }
   };
 
   return (
     <>
-      {props.showFlag ? (
-        <div className="flex mt-auto items-center justify-center bg-gray-200  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-48 p-5 flex-col absolute z-20">
-          <button
-            onClick={closeModal}
-            className="font-medium rounded-md bg-black bg-opacity-50 z-10"
-          >
-            ✖️
-          </button>
-          <h1 className="text-xl font-bold mb-5">栄養入力</h1>
-          <form onSubmit={onSubmit}>
-            <label>
-              糖質(g)：
-              <input
-                type="number"
-                min="0"
-                value={suger}
-                onChange={onSugerChange}
-              />
-            </label>
-            <br />
-            <label>
-              脂質(g)：
-              <input type="number" min="0" value={fat} onChange={onFatChange} />
-            </label>
-            <br />
-            <label>
-              タンパク質(g)：
-              <input
-                type="number"
-                min="0"
-                value={protein}
-                onChange={onProteinChange}
-              />
-            </label>
-            <br />
-            <label>
-              カロリー(kcal)：
-              <input
-                type="number"
-                min="0"
-                value={calorie}
-                onChange={onCalorieChange}
-              />
-            </label>
-            <br />
+      {props.showFlag && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+          <div className="relative bg-white p-8 rounded-lg shadow-lg w-96">
             <button
-              type="submit"
-              className="text-white bg-blue-500 hover:bg-blue-700 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              // onClick={closeModal}
+              onClick={closeModal}
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-700 hover:bg-gray-200 rounded-full"
+              aria-label="Close"
             >
-              送信
+              ✖️
             </button>
-          </form>
+            <h1 className="text-2xl font-bold mb-6 text-center">栄養入力</h1>
+            <form onSubmit={onSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  糖質(g)：
+                  <input
+                    type="number"
+                    min="0"
+                    value={suger}
+                    onChange={onSugerChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  />
+                </label>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  脂質(g)：
+                  <input
+                    type="number"
+                    min="0"
+                    value={fat}
+                    onChange={onFatChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  />
+                </label>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  タンパク質(g)：
+                  <input
+                    type="number"
+                    min="0"
+                    value={protein}
+                    onChange={onProteinChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  />
+                </label>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  カロリー(kcal)：
+                  <input
+                    type="number"
+                    min="0"
+                    value={calorie}
+                    onChange={onCalorieChange}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  />
+                </label>
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              >
+                送信
+              </button>
+            </form>
+          </div>
         </div>
-      ) : (
-        <></>
       )}
     </>
   );
