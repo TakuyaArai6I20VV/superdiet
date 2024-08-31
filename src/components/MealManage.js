@@ -16,9 +16,14 @@ const MealManage = () => {
 
   return (
     <div>
-      <h1>食事管理</h1>
-      <div className="meal-input">
-        <button onClick={ShowModal}>食事入力</button>
+      <h1 className="bg-blue-50">食事管理</h1>
+      <div className="meal-input" type="button">
+        <button
+          onClick={ShowModal}
+          className="block text-white bg-blue-700 hover:bg-blue-800 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+        >
+          食事入力
+        </button>
         <Modal showFlag={showModal} setShowModal={setShowModal} />
       </div>
 

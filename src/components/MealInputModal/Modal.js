@@ -37,7 +37,14 @@ const Modal = (props) => {
   return (
     <>
       {props.showFlag ? (
-        <div className="modal ">
+        <div className="flex mt-auto items-center justify-center bg-gray-200  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-48 p-5 flex-col absolute z-20">
+          <button
+            onClick={closeModal}
+            className="font-medium rounded-md bg-black bg-opacity-50 z-10"
+          >
+            ✖️
+          </button>
+          <h1 className="text-xl font-bold mb-5">栄養入力</h1>
           <form onSubmit={onSubmit}>
             <label>
               糖質(g)：
@@ -48,10 +55,12 @@ const Modal = (props) => {
                 onChange={onSugerChange}
               />
             </label>
+            <br />
             <label>
               脂質(g)：
               <input type="number" min="0" value={fat} onChange={onFatChange} />
             </label>
+            <br />
             <label>
               タンパク質(g)：
               <input
@@ -61,6 +70,7 @@ const Modal = (props) => {
                 onChange={onProteinChange}
               />
             </label>
+            <br />
             <label>
               カロリー(kcal)：
               <input
@@ -70,9 +80,15 @@ const Modal = (props) => {
                 onChange={onCalorieChange}
               />
             </label>
-            <button type="submit">送信</button>
+            <br />
+            <button
+              type="submit"
+              className="text-white bg-blue-500 hover:bg-blue-700 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              onClick={closeModal}
+            >
+              送信
+            </button>
           </form>
-          <button onClick={closeModal}>✖️</button>
         </div>
       ) : (
         <></>
