@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+// src/Home.tsx
+import { useNavigate } from "react-router-dom";
 
-function App() {
+const Home = () => {
+  const navigate = useNavigate();
+  const handleHome = () => {
+    navigate("/Home");
+  };
+  const handleSetting = () => {
+    navigate("/Setting");
+  };
+  const handleWeight = () => {
+    navigate("/WeightFluctuation");
+  };
+  const handleMeal = () => {
+    navigate("/MealManage");
+  };
+  const handleExercise = () => {
+    navigate("/Exercise");
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <button onClick={handleHome}>ホーム</button>
+      <button onClick={handleWeight}>体重変動</button>
+      <button onClick={handleMeal}>食事管理</button>
+      <button onClick={handleExercise}>運動入力</button>
+      <button onClick={handleSetting}>設定画面</button>
+    </>
   );
-}
-
-export default App;
+};
+export default Home;
