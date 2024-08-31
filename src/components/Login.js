@@ -17,6 +17,7 @@ const Login = () => {
     e.preventDefault();
     try {
       if (isLogin) {
+        console.log(email+","+password);
         const { error } = await supabase.auth.signInWithPassword({
           email: email,
           password: password,
@@ -30,7 +31,7 @@ const Login = () => {
         if (error) throw error;
       }
     } catch (error) {
-      alert(error.error_description || error.message);
+      alert(error);
     }
   };
 
