@@ -15,16 +15,16 @@ const MealManage = () => {
   }
 
   return (
-  <div>
-    食事管理
-    <div className="meal-input">
-      <button onClick={ShowModal}>食事入力</button>
-      <Modal showFlag={showModal} setShowModal={setShowModal}/>
-    </div>
+    <div>
+      <h1>食事管理</h1>
+      <div className="meal-input">
+        <button onClick={ShowModal}>食事入力</button>
+        <Modal showFlag={showModal} setShowModal={setShowModal} />
+      </div>
 
-    <button onClick={handleRoot}>戻る</button>
-  </div>
-  )
+      <button onClick={handleRoot}>戻る</button>
+    </div>
+  );
 };
 
 export default MealManage;
