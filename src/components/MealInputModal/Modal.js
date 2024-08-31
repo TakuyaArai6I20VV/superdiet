@@ -1,4 +1,12 @@
+import { createClient } from "@supabase/supabase-js";
 import { useState } from "react";
+
+// Set up your Supabase client
+const supabaseUrl = "https://qwhxtyfsbwiwcyemzsub.supabase.co";
+const supabaseKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3aHh0eWZzYndpd2N5ZW16c3ViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjUwNzE1MDAsImV4cCI6MjA0MDY0NzUwMH0.y-zwrkkULuts7hurqiuDCV0eRByn8YUqd2N8QdD4unE";
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 
 const Modal = (props) => {
   const [suger, setSuger] = useState(0);
@@ -8,31 +16,38 @@ const Modal = (props) => {
 
   const closeModal = () => {
     props.setShowModal(false);
-  }
+  };
 
   const onSugerChange = (e) => {
     setSuger(e.target.value);
-  }
+  };
 
   const onFatChange = (e) => {
     setFat(e.target.value);
-  }
+  };
 
   const onProteinChange = (e) => {
     setProtein(e.target.value);
-  }
+  };
 
   const onCalorieChange = (e) => {
     setCalorie(e.target.value);
-  }
+  };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    console.log('糖質：', suger);
-    console.log('脂質：', fat);
-    console.log('タンパク質：', protein);
-    console.log('カロリー：', calorie);
-  }
+    console.log("糖質：", suger);
+    console.log("脂質：", fat);
+    console.log("タンパク質：", protein);
+    console.log("カロリー：", calorie);
+
+    const { error } = await supabase
+      .from('meal')
+      .insert([
+        { suger: suger, fat: fat, protein: protein, calorie: calorie },
+      ])
+      .select();
+  };
 
   return (
     <>
@@ -84,7 +99,7 @@ const Modal = (props) => {
             <button
               type="submit"
               className="text-white bg-blue-500 hover:bg-blue-700 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              onClick={closeModal}
+              // onClick={closeModal}
             >
               送信
             </button>
@@ -95,6 +110,6 @@ const Modal = (props) => {
       )}
     </>
   );
-}
+};
 
 export default Modal;
