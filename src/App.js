@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { createClient } from '@supabase/supabase-js';
 import { useEffect, useState } from "react";
 
+import { BrowserRouter as Router } from 'react-router-dom';
+import Layout from './Layout';
+import { AppRoutes } from './Routes';
+
 import { Drawer, AppBar, Toolbar, List, ListItem, ListItemText, CssBaseline, Typography, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
