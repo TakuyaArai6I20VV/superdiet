@@ -17,19 +17,19 @@ const Modal = (props) => {
   };
 
   const onSugerChange = (e) => {
-    setSuger(parseInt(e.target.value, 10) || 0);
+    setSuger(parseInt(e.target.value, 10) || 0); // 数値として取得
   };
 
   const onFatChange = (e) => {
-    setFat(parseInt(e.target.value, 10) || 0);
+    setFat(parseInt(e.target.value, 10) || 0); // 数値として取得
   };
 
   const onProteinChange = (e) => {
-    setProtein(parseInt(e.target.value, 10) || 0);
+    setProtein(parseInt(e.target.value, 10) || 0); // 数値として取得
   };
 
   const onCalorieChange = (e) => {
-    setCalorie(parseInt(e.target.value, 10) || 0);
+    setCalorie(parseInt(e.target.value, 10) || 0); // 数値として取得
   };
 
   const onSubmit = async (e) => {
@@ -48,78 +48,72 @@ const Modal = (props) => {
       console.error("データの挿入に失敗しました:", error);
     } else {
       console.log("データが挿入されました:", data);
-      closeModal();
+      props.onSuccess(); // データが正常に挿入された後に `fetchTotals` を呼び出す
+      closeModal(); // モーダルを閉じる
     }
   };
 
   return (
     <>
       {props.showFlag && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
-          <div className="relative bg-white p-8 rounded-lg shadow-lg w-96">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 z-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-4 sm:mx-0">
             <button
               onClick={closeModal}
-              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-700 hover:bg-gray-200 rounded-full"
-              aria-label="Close"
+              className="absolute top-3 right-3 text-gray-600 hover:text-gray-900"
             >
               ✖️
             </button>
-            <h1 className="text-2xl font-bold mb-6 text-center">栄養入力</h1>
-            <form onSubmit={onSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  糖質(g)：
+            <h1 className="text-xl font-bold mb-4 text-center">栄養入力</h1>
+            <form onSubmit={onSubmit}>
+              <div className="space-y-4">
+                <label className="block">
+                  糖質(g):
                   <input
                     type="number"
                     min="0"
                     value={suger}
                     onChange={onSugerChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </label>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  脂質(g)：
+                <label className="block">
+                  脂質(g):
                   <input
                     type="number"
                     min="0"
                     value={fat}
                     onChange={onFatChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </label>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  タンパク質(g)：
+                <label className="block">
+                  タンパク質(g):
                   <input
                     type="number"
                     min="0"
                     value={protein}
                     onChange={onProteinChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </label>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  カロリー(kcal)：
+                <label className="block">
+                  カロリー(kcal):
                   <input
                     type="number"
                     min="0"
                     value={calorie}
                     onChange={onCalorieChange}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </label>
+                <button
+                  type="submit"
+                  className="w-full py-2 px-4 bg-blue-500 text-white rounded-lg shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  送信
+                </button>
               </div>
-              <button
-                type="submit"
-                className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-              >
-                送信
-              </button>
             </form>
           </div>
         </div>
