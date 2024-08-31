@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const drawerWidth = 240;
 
 const Layout = ({ children }) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const handleDrawerToggle = () => {
     setOpen(!open);
@@ -16,22 +16,6 @@ const Layout = ({ children }) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerToggle}
-            edge="start"
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Be your Supaman
-          </Typography>
-        </Toolbar>
-      </AppBar>
       <Drawer
         sx={{
           width: drawerWidth,
@@ -41,13 +25,14 @@ const Layout = ({ children }) => {
             boxSizing: 'border-box',
           },
         }}
-        variant="persistent"
+        variant="temporary"
         anchor="left"
         open={open}
+        onClose={handleDrawerToggle}
       >
         <Toolbar />
         <List>
-          <ListItem button component={Link} to="/home">
+          <ListItem button component={Link} to="/">
             <ListItemText primary="ホーム" />
           </ListItem>
           <ListItem button component={Link} to="/login">
@@ -67,6 +52,22 @@ const Layout = ({ children }) => {
           </ListItem>
         </List>
       </Drawer>
+      <AppBar>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerToggle}
+            edge="start"
+            sx={{ mr: 2}}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div">
+            Be your Supaman
+          </Typography>
+        </Toolbar>
+      </AppBar>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
         {children}
