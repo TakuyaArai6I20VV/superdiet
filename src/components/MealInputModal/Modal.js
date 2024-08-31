@@ -66,7 +66,7 @@ const Modal = ({ showFlag, setShowModal, onSuccess }) => {
     <>
       {showFlag && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-4 sm:mx-0 relative">
+          <div className="bg-white rounded-lg shadow-lg p-8 w-3/5 max-w-4xl relative">
             <button
               onClick={closeModal}
               className="absolute top-3 right-3 text-gray-600 hover:text-gray-900"
