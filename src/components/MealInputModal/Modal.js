@@ -6,65 +6,74 @@ const supabaseKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3aHh0eWZzYndpd2N5ZW16c3ViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjUwNzE1MDAsImV4cCI6MjA0MDY0NzUwMH0.y-zwrkkULuts7hurqiuDCV0eRByn8YUqd2N8QdD4unE";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const Modal = (props) => {
-  const [suger, setSuger] = useState(0);
-  const [fat, setFat] = useState(0);
-  const [protein, setProtein] = useState(0);
-  const [calorie, setCalorie] = useState(0);
+const Modal = ({ showFlag, setShowModal, onSuccess }) => {
+  const [suger, setSuger] = useState("");
+  const [fat, setFat] = useState("");
+  const [protein, setProtein] = useState("");
+  const [calorie, setCalorie] = useState("");
 
   const closeModal = () => {
-    props.setShowModal(false);
+    setShowModal(false);
   };
 
   const onSugerChange = (e) => {
-    setSuger(parseInt(e.target.value, 10) || 0); // 数値として取得
+    setSuger(e.target.value);
   };
 
   const onFatChange = (e) => {
-    setFat(parseInt(e.target.value, 10) || 0); // 数値として取得
+    setFat(e.target.value);
   };
 
   const onProteinChange = (e) => {
-    setProtein(parseInt(e.target.value, 10) || 0); // 数値として取得
+    setProtein(e.target.value);
   };
 
   const onCalorieChange = (e) => {
-    setCalorie(parseInt(e.target.value, 10) || 0); // 数値として取得
+    setCalorie(e.target.value);
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log("糖質：", suger);
-    console.log("脂質：", fat);
-    console.log("タンパク質：", protein);
-    console.log("カロリー：", calorie);
+
+    // デフォルト値を 0 に設定
+    const sugerValue = suger === "" ? 0 : Number(suger);
+    const fatValue = fat === "" ? 0 : Number(fat);
+    const proteinValue = protein === "" ? 0 : Number(protein);
+    const calorieValue = calorie === "" ? 0 : Number(calorie);
 
     const { data, error } = await supabase
       .from("meal")
-      .insert([{ suger: suger, fat: fat, protein: protein, calorie: calorie }])
+      .insert([
+        {
+          suger: sugerValue,
+          fat: fatValue,
+          protein: proteinValue,
+          calorie: calorieValue,
+        },
+      ])
       .select();
 
     if (error) {
       console.error("データの挿入に失敗しました:", error);
     } else {
       console.log("データが挿入されました:", data);
-      props.onSuccess(); // データが正常に挿入された後に `fetchTotals` を呼び出す
-      closeModal(); // モーダルを閉じる
+      onSuccess(); // データが正常に挿入された後に `fetchTotals` を呼び出す
+      closeModal();
     }
   };
 
   return (
     <>
-      {props.showFlag && (
+      {showFlag && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-4 sm:mx-0">
+          <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-4 sm:mx-0 relative">
             <button
               onClick={closeModal}
               className="absolute top-3 right-3 text-gray-600 hover:text-gray-900"
             >
               ✖️
             </button>
-            <h1 className="text-xl font-bold mb-4 text-center">栄養入力</h1>
+            <h1 className="text-xl font-bold mb-4 text-center">栄養情報</h1>
             <form onSubmit={onSubmit}>
               <div className="space-y-4">
                 <label className="block">
