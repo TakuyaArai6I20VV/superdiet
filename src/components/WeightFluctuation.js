@@ -5,6 +5,8 @@ import 'chart.js/auto'; // Chart.jsの自動インポート
 import { Container, TextField, Button, Typography, Box, List, ListItem } from '@mui/material';
 import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper } from '@mui/material';
 
+import Layout from '../Layout';
+
 // Set up your Supabase client
 const supabaseUrl = 'https://qwhxtyfsbwiwcyemzsub.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3aHh0eWZzYndpd2N5ZW16c3ViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjUwNzE1MDAsImV4cCI6MjA0MDY0NzUwMH0.y-zwrkkULuts7hurqiuDCV0eRByn8YUqd2N8QdD4unE'; // セキュリティのためにAPIキーは環境変数に格納するのが推奨です。
@@ -98,12 +100,13 @@ const WeightFluctuation = () => {
 
   return (
     <Container>
+      <Layout />
       <Typography variant="h4" gutterBottom>
         体重変動
       </Typography>
       <Box mb={2}>
         <TextField
-          label="体重を入力"
+          label="今日の体重を入力"
           variant="outlined"
           value={weight}
           onChange={(e) => setWeight(e.target.value)}

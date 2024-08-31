@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Modal from "./MealInputModal/Modal";
 import { createClient } from "@supabase/supabase-js";
 
+import Layout from '../Layout';
+
 const supabaseUrl = "https://qwhxtyfsbwiwcyemzsub.supabase.co";
 const supabaseKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3aHh0eWZzYndpd2N5ZW16c3ViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjUwNzE1MDAsImV4cCI6MjA0MDY0NzUwMH0.y-zwrkkULuts7hurqiuDCV0eRByn8YUqd2N8QdD4unE";
@@ -97,6 +99,8 @@ const MealManage = () => {
   };
 
   return (
+    <>
+    <Layout />
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
       <h1 className="text-3xl font-bold mb-6 text-blue-900">食事管理</h1>
 
@@ -240,6 +244,7 @@ const MealManage = () => {
         />
       )}
     </div>
+    </>
   );
 };
 

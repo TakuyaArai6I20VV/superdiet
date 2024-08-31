@@ -81,6 +81,22 @@ const Home = () => {
   
 
   return (
+  <>
+  <Layout />
+  <div>
+    <main style={{ flexGrow: 1, padding: 3 }}>
+      <Toolbar />
+        <Typography paragraph>
+          <button>ログイン情報</button>
+        </Typography>
+    </main>
+  </div>
+  </>
+  );
+};
+export default Home;
+
+{/*
     <>
       <div style={{ display: 'flex' }}>
         <CssBaseline />
@@ -143,6 +159,4 @@ const Home = () => {
         </main>
       </div>
     </>
-  );
-};
-export default Home;
+    */}
