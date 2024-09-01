@@ -420,19 +420,18 @@ const Home = () => {
     <>
       <ThemeProvider theme={theme}>
         <Layout />
-        <div className="flex flex-col p-4 space-y-4">
-          <div className="flex flex-col md:flex-row gap-4">
-            {/* 食事管理 Container */}
-            <Container className="flex-1 min-h-[600px] mb-6">
-              {" "}
-              {/* Add bottom margin here */}
+        <div className="flex flex-col p-4 space-y-6">
+          {/* 上部コンテナ：食事管理と画像生成 */}
+          <div className="flex flex-col md:flex-row gap-6">
+            {/* 食事管理 */}
+            <Container className="flex-1 bg-gray-100 shadow-md rounded-lg p-8">
               <Typography variant="h4" gutterBottom>
                 食事管理
               </Typography>
-              <Box mb={2} className="h-full">
-                <div className="bg-gray-100 shadow-md rounded-lg p-8 h-full flex flex-col">
+              <Box mb={2} className="flex-1">
+                <div className="flex-1 bg-gray-100 shadow-md rounded-lg p-8">
                   <h2 className="text-2xl font-semibold mb-6">今日の合計</h2>
-                  <div className="flex-1 grid grid-cols-2 gap-6">
+                  <div className="grid grid-cols-2 gap-6">
                     {Object.entries(totals).map(([key, value]) => (
                       <div key={key} className="flex flex-col items-center">
                         <div className="relative w-32 h-32">
@@ -554,98 +553,103 @@ const Home = () => {
               </Box>
             </Container>
 
-            {/* 体重変動 Container */}
-            <Container className="flex-1 min-h-[600px] mb-6">
-              {" "}
-              {/* Add bottom margin here */}
+            {/* 画像生成 */}
+            <Container className="flex-1 bg-gray-100 shadow-md rounded-lg p-8">
               <Typography variant="h4" gutterBottom>
-                体重変動
+                画像生成
               </Typography>
-              <Box
-                display="flex"
-                flexDirection="column"
-                mb={4}
-                className="h-full"
-              >
-                <div className="bg-gray-100 shadow-md rounded-lg p-8 flex flex-col h-full">
-                  <Typography variant="h6" gutterBottom>
-                    体重履歴
-                  </Typography>
-                  <Box flex={1} mb={4}>
-                    <TableContainer component={Paper}>
-                      <Table>
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Date</TableCell>
-                            <TableCell align="right">Weight (kg)</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {data.map((entry) => (
-                            <TableRow key={entry.date}>
-                              <TableCell>{entry.date}</TableCell>
-                              <TableCell align="right">
-                                {entry.weight} kg
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Box>
-                  <Box flex={2} className="flex-grow">
-                    <Box sx={{ width: "100%", height: "400px" }}>
-                      <Line data={chartData} options={chartOptions} />
-                    </Box>
-                  </Box>
+              <Box className="h-[calc(100%-2rem)] flex flex-col">
+                <input onChange={handleChange} type="file" className="mb-4" />
+                <button
+                  onClick={handleClick}
+                  className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
+                >
+                  生成！
+                </button>
+                <div className="flex-1 overflow-auto">
+                  {image && (
+                    <img
+                      src={image}
+                      alt="Uploaded"
+                      className="mb-4 max-w-full h-auto"
+                    />
+                  )}
+                  {generatedImage && (
+                    <img
+                      src={generatedImage}
+                      alt="Generated"
+                      className="max-w-full h-auto"
+                    />
+                  )}
                 </div>
               </Box>
             </Container>
+          </div>
 
-            {/* 運動 Container */}
-            <Container>
-              <Typography variant="h6" gutterBottom>
-                今日の運動
+          {/* 下部コンテナ：体重変動と運動記録 */}
+          <div className="flex flex-col md:flex-row gap-6">
+            {/* 体重変動 */}
+            <Container className="flex-1 bg-gray-100 shadow-md rounded-lg p-8">
+              <Typography variant="h4" gutterBottom>
+                体重変動
               </Typography>
-              <Box display="flex" justifyContent="space-between" mb={4}>
-                <Box flex={1} mr={2}>
-                  <TableContainer component={Paper}>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>一覧</TableCell>
-                          <TableCell align="right">運動時間（分）</TableCell>
+              <Box className="h-[calc(100%-2rem)] flex flex-col">
+                <Typography variant="h6" gutterBottom>
+                  体重履歴
+                </Typography>
+                <TableContainer
+                  component={Paper}
+                  className="mb-4 flex-shrink-0"
+                  style={{ maxHeight: "200px", overflowY: "auto" }}
+                >
+                  <Table stickyHeader>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Date</TableCell>
+                        <TableCell align="right">Weight (kg)</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {data.map((entry) => (
+                        <TableRow key={entry.date}>
+                          <TableCell>{entry.date}</TableCell>
+                          <TableCell align="right">{entry.weight} kg</TableCell>
                         </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {(data || []).map((entry) => (
-                          <TableRow key={entry.time}>
-                            <TableCell>{entry.content}</TableCell>
-                            <TableCell align="right">{entry.time} 分</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </Box>
-                <Box flex={2}>
-                  <Box></Box>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <Box className="flex-grow">
+                  <Line data={chartData} options={chartOptions} />
                 </Box>
               </Box>
             </Container>
 
-            {/* イメージ Container */}
-            <Container>
-              <div>
-                <input onChange={handleChange} type="file" />
-                {image && <img src={image} alt="Uploaded" />}{" "}
-                {/* アップロードされた画像を表示 */}
-                <button onClick={handleClick}>生成！</button>
-                {generatedImage && (
-                  <img src={generatedImage} alt="Generated" />
-                )}{" "}
-                {/* 生成された画像を表示 */}
-              </div>
+            {/* 運動記録 */}
+            <Container className="flex-1 bg-gray-100 shadow-md rounded-lg p-8">
+              <Typography variant="h4" gutterBottom>
+                今日の運動
+              </Typography>
+              <Box className="h-[calc(100%-2rem)] flex flex-col">
+                <TableContainer component={Paper} className="flex-grow">
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>一覧</TableCell>
+                        <TableCell align="right">運動時間（分）</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {(data || []).map((entry) => (
+                        <TableRow key={entry.time}>
+                          <TableCell>{entry.content}</TableCell>
+                          <TableCell align="right">{entry.time} 分</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
             </Container>
           </div>
         </div>
