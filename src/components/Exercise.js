@@ -40,7 +40,7 @@ const Exercise = () => {
         .from('workout')
         .select('*')
         .eq('user_id', user.id)
-        .order('date', { ascending: false });
+        .order('date', { ascending: true });
 
       if (error) {
         console.error('Error fetching data:', error);
@@ -64,11 +64,12 @@ const Exercise = () => {
       setTime('');
       // Re-fetch data to update the list
       const { data: { user } } = await supabase.auth.getUser();
-      const { data: contentData } = await supabase
-        .from('content')
+      const { data: contentData, error } = await supabase
+        .from('workout')
         .select('*')
         .eq('user_id', user.id)
-        .order('date', { ascending: false });
+        .order('date', { ascending: true });
+
       setData(contentData);
     }
   };

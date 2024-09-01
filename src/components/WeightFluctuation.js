@@ -39,7 +39,7 @@ const WeightFluctuation = () => {
         .from('weight')
         .select('*')
         .eq('user_id', user.id)
-        .order('date', { ascending: false });
+        .order('date', { ascending: true });
 
       if (error) {
         console.error('Error fetching data:', error);
@@ -62,11 +62,11 @@ const WeightFluctuation = () => {
       setWeight(''); // Clear the input after adding
       // Re-fetch data to update the list
       const { data: { user } } = await supabase.auth.getUser();
-      const { data: weightData } = await supabase
+      const { data: weightData, error } = await supabase
         .from('weight')
         .select('*')
         .eq('user_id', user.id)
-        .order('date', { ascending: false });
+        .order('date', { ascending: true });
       setData(weightData);
     }
   };
