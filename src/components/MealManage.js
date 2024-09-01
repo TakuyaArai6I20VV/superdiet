@@ -107,6 +107,9 @@ const MealManage = () => {
       <Layout />
       <Container>
         <div>
+          <Typography variant="h4" gutterBottom>
+            食事管理
+          </Typography>
           <div>
             <Box mb={2}>
               <Button
