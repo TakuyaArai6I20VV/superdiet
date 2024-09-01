@@ -5,10 +5,27 @@ import { createClient } from '@supabase/supabase-js';
 import { Container, TextField, Button, Typography, Box, List, ListItem } from '@mui/material';
 import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper } from '@mui/material';
 
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 // Set up your Supabase client
 const supabaseUrl = 'https://qwhxtyfsbwiwcyemzsub.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3aHh0eWZzYndpd2N5ZW16c3ViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjUwNzE1MDAsImV4cCI6MjA0MDY0NzUwMH0.y-zwrkkULuts7hurqiuDCV0eRByn8YUqd2N8QdD4unE'; // セキュリティのためにAPIキーは環境変数に格納するのが推奨です。
 const supabase = createClient(supabaseUrl, supabaseKey);
+
+
+
+const theme = createTheme({
+  typography: {
+    // fontSize: 19,
+    h4: {
+      fontSize: 28,
+      fontWeight: 700
+    },
+    h6: {
+      fontWeight: 1000,
+    }
+  }
+});
 
 const Exercise = () => {
   const [content, setContent] = useState('');
@@ -56,6 +73,7 @@ const Exercise = () => {
 
   return (
   <>
+  <ThemeProvider theme={theme}>
     <Layout />
     <Container>
       <Typography variant="h4" gutterBottom>
@@ -111,6 +129,7 @@ const Exercise = () => {
         </Box>
       </Box>
     </Container>
+    </ThemeProvider>
   </>
   );
 };
