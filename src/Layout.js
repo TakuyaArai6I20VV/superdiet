@@ -4,7 +4,22 @@ import { Drawer, AppBar, Toolbar, List, ListItem, ListItemText, CssBaseline, Typ
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
 
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 const drawerWidth = 240;
+
+const theme = createTheme({
+  typography: {
+    // fontSize: 19,
+    h4: {
+      fontSize: 28,
+      fontWeight: 700
+    },
+    h6: {
+      fontWeight: 1000,
+    }
+  }
+});
 
 const Layout = ({ children }) => {
   const [open, setOpen] = useState(false);
@@ -14,6 +29,7 @@ const Layout = ({ children }) => {
   };
 
   return (
+    <ThemeProvider theme={theme}>
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <Drawer
@@ -73,6 +89,7 @@ const Layout = ({ children }) => {
         {children}
       </Box>
     </Box>
+    </ThemeProvider>
   );
 };
 
