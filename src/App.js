@@ -397,8 +397,7 @@ const Home = () => {
         formData,
         {
           headers: {
-            Authorization:
-              "sk-RqpQJJrkOq5oOIpzjShLKOfsLOJkyPRHTmREPXe8lfeBeArc",
+            Authorization: "sk-AxdmiKDeWFnUujz93LhEMEEZM0mqu1DU6v4NaQ1L8A7gt0bZ",
             "Content-Type": "multipart/form-data",
           },
         }
@@ -567,6 +566,7 @@ const Home = () => {
                   生成！
                 </button>
                 <div className="flex-1 overflow-auto">
+                  {/*
                   {image && (
                     <img
                       src={image}
@@ -574,6 +574,7 @@ const Home = () => {
                       className="mb-4 max-w-full h-auto"
                     />
                   )}
+                    */}
                   {generatedImage && (
                     <img
                       src={generatedImage}
