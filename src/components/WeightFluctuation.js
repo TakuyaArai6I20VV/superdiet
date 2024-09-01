@@ -99,8 +99,9 @@ const WeightFluctuation = () => {
   };
 
   return (
+    <>
+    <Layout />
     <Container>
-      <Layout />
       <Typography variant="h4" gutterBottom>
         体重変動
       </Typography>
@@ -154,6 +155,7 @@ const WeightFluctuation = () => {
         </Box>
       </Box>
     </Container>
+    </>
   );
 };
 
