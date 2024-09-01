@@ -29,6 +29,7 @@ const theme = createTheme({
 
 const Exercise = () => {
   const [content, setContent] = useState('');
+  const [time, setTime] = useState('');
   const [data, setData] = useState([]);
   const [uuid, setUUID] = useState('');
 
@@ -39,7 +40,7 @@ const Exercise = () => {
         .from('workout')
         .select('*')
         .eq('user_id', user.id)
-        .order('date', { ascending: false });
+        .order('date', { ascending: true });
 
       if (error) {
         console.error('Error fetching data:', error);
@@ -54,19 +55,21 @@ const Exercise = () => {
 
   // Add new weight entry
   const addContent = async () => {
-    const { error } = await supabase.from('workout').insert([{ content: parseFloat(content), user_id: uuid }]);
+    const { error } = await supabase.from('workout').insert([{ content: content, user_id: uuid, time: time }]);
     
     if (error) {
       console.error('Error adding workout:', error);
     } else {
       setContent(''); // Clear the input after adding
+      setTime('');
       // Re-fetch data to update the list
       const { data: { user } } = await supabase.auth.getUser();
-      const { data: contentData } = await supabase
-        .from('content')
+      const { data: contentData, error } = await supabase
+        .from('workout')
         .select('*')
         .eq('user_id', user.id)
-        .order('date', { ascending: false });
+        .order('date', { ascending: true });
+
       setData(contentData);
     }
   };
@@ -79,14 +82,23 @@ const Exercise = () => {
       <Typography variant="h4" gutterBottom>
         運動入力
       </Typography>
+      <Box>
       <Box mb={2}>
         <TextField
           label="今日の運動を入力"
           variant="outlined"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          fullWidth
         />
+      </Box>
+      <Box mb={2}>
+        <TextField
+          label="運動時間"
+          variant="outlined"
+          value={time}
+          onChange={(e) => setTime(e.target.value)}
+        />
+      </Box>
       </Box>
       <Box mb={4}>
         <Button
@@ -107,16 +119,16 @@ const Exercise = () => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Date</TableCell>
-                            <TableCell align="right">Weight (kg)</TableCell>
+                            <TableCell>一覧</TableCell>
+                            <TableCell align="right">運動時間（分）</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                    {data.map((entry) => (
-                        <TableRow key={entry.date}>
-                            <TableCell>{entry.date}</TableCell>
-                            <TableCell align="right">{entry.content} kg</TableCell>
-                        </TableRow>
+                    {(data || []).map((entry) => (
+                      <TableRow key={entry.time}>
+                        <TableCell>{entry.content}</TableCell>
+                        <TableCell align="right">{entry.time} 分</TableCell>
+                      </TableRow>
                     ))}
                     </TableBody>
                 </Table>
