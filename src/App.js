@@ -6,6 +6,7 @@ import { Line } from "react-chartjs-2";
 import { BrowserRouter as Router } from 'react-router-dom';
 import Layout from './Layout';
 import { AppRoutes } from './Routes';
+import axios from "axios";
 
 import {
   Drawer,
@@ -286,6 +287,135 @@ const Home = () => {
     },
   };
 
+  // 運動
+  const [content, setContent] = useState("");
+  const [time, setTime] = useState("");
+  // const [data, setData] = useState([]);
+  // const [uuid, setUUID] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const { data: contentData, error } = await supabase
+        .from("workout")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("date", { ascending: true });
+
+      if (error) {
+        console.error("Error fetching data:", error);
+      } else {
+        setData(contentData);
+        setUUID(user.id);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Add new weight entry
+  const addContent = async () => {
+    const { error } = await supabase
+      .from("workout")
+      .insert([{ content: content, user_id: uuid, time: time }]);
+
+    if (error) {
+      console.error("Error adding workout:", error);
+    } else {
+      setContent(""); // Clear the input after adding
+      setTime("");
+      // Re-fetch data to update the list
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const { data: contentData, error } = await supabase
+        .from("workout")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("date", { ascending: true });
+
+      setData(contentData);
+    }
+  };
+
+  // イメージ
+  const [image, setImage] = useState(null); // 初期値をnullに設定
+  const [generatedImage, setGeneratedImage] = useState(null); // 生成された画像用のステート
+  // コンポーネントの初期レンダリング時にLocalStorageから画像を取得
+  useEffect(() => {
+    const savedImage = localStorage.getItem("generatedImage");
+    if (savedImage) {
+      setGeneratedImage(savedImage);
+    }
+  }, []);
+  // ファイルをBase64形式で読み込む関数
+  const readFileAsDataURL = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result); // 成功時に結果を返す
+      reader.onerror = (error) => reject(error); // エラーが発生した場合
+      reader.readAsDataURL(file); // ファイルをBase64として読み込む
+    });
+  };
+  const base64ToBlob = (base64, mime) => {
+    const byteString = atob(base64.split(",")[1]);
+    const mimeString = mime || "image/jpeg";
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+  };
+
+  // ファイルが選択されたときの処理
+  const handleChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const base64Image = await readFileAsDataURL(file);
+      setImage(base64Image); // 読み込んだ画像を設定
+    }
+  };
+
+  // 生成ボタンが押されたときの処理
+  const handleClick = async () => {
+    const formData = new FormData();
+    formData.append("prompt", "make the person funny");
+    formData.append("output_format", "jpeg");
+    formData.append("mode", "image-to-image");
+    formData.append("strength", "0.7");
+    if (image) {
+      const blob = base64ToBlob(image, "image/jpeg"); // Base64をBlobに変換
+      formData.append("image", blob, "image.jpg"); // BlobをFormDataに追加
+    }
+
+    try {
+      const response = await axios.post(
+        "https://api.stability.ai/v2beta/stable-image/generate/sd3",
+        formData,
+        {
+          headers: {
+            Authorization:
+              "sk-RqpQJJrkOq5oOIpzjShLKOfsLOJkyPRHTmREPXe8lfeBeArc",
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const base64GeneratedImage = `data:image/jpeg;base64,${response.data.image}`; // Base64形式でレスポンスを受け取る
+        localStorage.setItem("generatedImage", base64GeneratedImage);
+        setGeneratedImage(base64GeneratedImage); // 生成された画像を設定
+      } else {
+        console.error(`Error: ${response.status}`);
+      }
+    } catch (error) {
+      console.error("Error during image generation:", error);
+    }
+  };
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -470,6 +600,52 @@ const Home = () => {
                   </Box>
                 </div>
               </Box>
+            </Container>
+
+            {/* 運動 Container */}
+            <Container>
+              <Typography variant="h6" gutterBottom>
+                今日の運動
+              </Typography>
+              <Box display="flex" justifyContent="space-between" mb={4}>
+                <Box flex={1} mr={2}>
+                  <TableContainer component={Paper}>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>一覧</TableCell>
+                          <TableCell align="right">運動時間（分）</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {(data || []).map((entry) => (
+                          <TableRow key={entry.time}>
+                            <TableCell>{entry.content}</TableCell>
+                            <TableCell align="right">{entry.time} 分</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Box>
+                <Box flex={2}>
+                  <Box></Box>
+                </Box>
+              </Box>
+            </Container>
+
+            {/* イメージ Container */}
+            <Container>
+              <div>
+                <input onChange={handleChange} type="file" />
+                {image && <img src={image} alt="Uploaded" />}{" "}
+                {/* アップロードされた画像を表示 */}
+                <button onClick={handleClick}>生成！</button>
+                {generatedImage && (
+                  <img src={generatedImage} alt="Generated" />
+                )}{" "}
+                {/* 生成された画像を表示 */}
+              </div>
             </Container>
           </div>
         </div>
