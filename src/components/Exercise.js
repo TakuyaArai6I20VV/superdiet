@@ -105,7 +105,6 @@ const Exercise = () => {
           variant="contained"
           color="primary"
           onClick={addContent}
-          fullWidth
         >
           運動を追加
         </Button>
