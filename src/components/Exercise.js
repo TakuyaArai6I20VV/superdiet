@@ -3,9 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
 import { Container, TextField, Button, Typography, Box, List, ListItem } from '@mui/material';
-import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper } from '@mui/material';
+import { Avatar,TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper } from '@mui/material';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Autocomplete } from '@mui/material';
 
 // Set up your Supabase client
 const supabaseUrl = 'https://qwhxtyfsbwiwcyemzsub.supabase.co';
@@ -23,8 +24,32 @@ const theme = createTheme({
     },
     h6: {
       fontWeight: 1000,
-    }
-  }
+    },
+    h8: {
+      fontSize: '1.5rem',  // Adjust size as needed
+      fontWeight: 'bold',
+      color: '#333',       // Adjust color as needed
+    },
+    h9: {
+      fontSize: '1.25rem', // Adjust size as needed
+      fontWeight: 'normal',
+      color: '#666',       // Adjust color as needed
+    },
+  },
+  components: {
+    MuiAvatar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#2196f3', // Adjust color as needed
+          width: '200px',
+          height: '200px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+      },
+    },
+  },
 });
 
 const Exercise = () => {
@@ -32,6 +57,19 @@ const Exercise = () => {
   const [time, setTime] = useState('');
   const [data, setData] = useState([]);
   const [uuid, setUUID] = useState('');
+
+  var calory = 0;
+
+  const options = [
+    'ランニング',
+    'ウォーキング',
+    '筋トレ',
+    'ヨガ',
+    'サイクリング',
+    'その他',
+  ];
+
+  const nums = [10,3,5,2.7,8.5,5];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,6 +110,18 @@ const Exercise = () => {
 
       setData(contentData);
     }
+
+  // calory = 0;
+    // カロリー計算
+  data.forEach(item => {
+    const index = options.indexOf(item.content);
+    if (index !== -1) {
+      const caloriePerMinute = nums[index];
+      calory += caloriePerMinute * parseInt(item.time, 10);
+    }
+  });
+    
+    console.log(data);
   };
 
   return (
@@ -84,12 +134,18 @@ const Exercise = () => {
       </Typography>
       <Box>
       <Box mb={2}>
+      <Autocomplete
+      options={options}
+      value={content}
+      onChange={(event, newValue) => setContent(newValue)}
+      renderInput={(params) => (
         <TextField
+          {...params}
           label="今日の運動を入力"
           variant="outlined"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
         />
+      )}
+    />
       </Box>
       <Box mb={2}>
         <TextField
@@ -110,7 +166,7 @@ const Exercise = () => {
         </Button>
       </Box>
       <Typography variant="h6" gutterBottom>
-            今日の運動
+            今日の運動 （総カロリー：{calory}kcal）
       </Typography>
       <Box display="flex" justifyContent="space-between" mb={4}>
         <Box flex={1} mr={2}>
@@ -134,9 +190,6 @@ const Exercise = () => {
             </TableContainer>
         </Box>
         <Box flex={2}>
-          <Box>
-            
-          </Box>
         </Box>
       </Box>
     </Container>
