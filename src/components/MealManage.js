@@ -107,9 +107,6 @@ const MealManage = () => {
       <Layout />
       <Container>
         <div>
-          <Typography variant="h4" gutterBottom>
-            食事管理
-          </Typography>
           <div>
             <Box mb={2}>
               <Button
@@ -247,7 +244,6 @@ const MealManage = () => {
             <Box mb={2}>
               <Button
                 variant="contained"
-                // color="primary"
                 onClick={handleRoot}
                 fullWidth
                 className="bg-gray-500 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50"

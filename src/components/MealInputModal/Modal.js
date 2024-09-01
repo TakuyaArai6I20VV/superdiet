@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createClient } from "@supabase/supabase-js";
+import { Container, Typography, Button, Box } from "@mui/material";
 
 const supabaseUrl = "https://qwhxtyfsbwiwcyemzsub.supabase.co";
 const supabaseKey =
@@ -64,69 +65,76 @@ const Modal = ({ showFlag, setShowModal, onSuccess }) => {
 
   return (
     <>
-      {showFlag && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg shadow-lg p-8 w-3/5 max-w-4xl relative">
-            <button
-              onClick={closeModal}
-              className="absolute top-3 right-3 text-gray-600 hover:text-gray-900"
-            >
-              ✖️
-            </button>
-            <h1 className="text-xl font-bold mb-4 text-center">栄養情報</h1>
-            <form onSubmit={onSubmit}>
-              <div className="space-y-4">
-                <label className="block">
-                  糖質(g):
-                  <input
-                    type="number"
-                    min="0"
-                    value={suger}
-                    onChange={onSugerChange}
-                    className="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </label>
-                <label className="block">
-                  脂質(g):
-                  <input
-                    type="number"
-                    min="0"
-                    value={fat}
-                    onChange={onFatChange}
-                    className="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </label>
-                <label className="block">
-                  タンパク質(g):
-                  <input
-                    type="number"
-                    min="0"
-                    value={protein}
-                    onChange={onProteinChange}
-                    className="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </label>
-                <label className="block">
-                  カロリー(kcal):
-                  <input
-                    type="number"
-                    min="0"
-                    value={calorie}
-                    onChange={onCalorieChange}
-                    className="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </label>
-                <button
-                  type="submit"
-                  className="w-full py-2 px-4 bg-blue-500 text-white rounded-lg shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  送信
-                </button>
-              </div>
-            </form>
+      <Container>
+        {showFlag && (
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 z-50">
+            <div className="bg-white rounded-lg shadow-lg p-8 w-3/5 max-w-4xl relative">
+              <button
+                onClick={closeModal}
+                className="absolute top-3 right-3 text-gray-600 hover:text-gray-900"
+              >
+                ✖️
+              </button>
+              <h1 className="text-2xl mb-4 text-center">栄養情報</h1>
+              <form onSubmit={onSubmit}>
+                <div className="space-y-4">
+                  <label className="block">
+                    糖質(g):
+                    <input
+                      type="number"
+                      min="0"
+                      value={suger}
+                      onChange={onSugerChange}
+                      className="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </label>
+                  <label className="block">
+                    脂質(g):
+                    <input
+                      type="number"
+                      min="0"
+                      value={fat}
+                      onChange={onFatChange}
+                      className="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </label>
+                  <label className="block">
+                    タンパク質(g):
+                    <input
+                      type="number"
+                      min="0"
+                      value={protein}
+                      onChange={onProteinChange}
+                      className="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </label>
+                  <label className="block">
+                    カロリー(kcal):
+                    <input
+                      type="number"
+                      min="0"
+                      value={calorie}
+                      onChange={onCalorieChange}
+                      className="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </label>
+
+                  <Box mb={2}>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      fullWidth
+                      className="py-2 px-4 bg-blue-500 text-white rounded-lg shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      送信
+                    </Button>
+                  </Box>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </Container>
     </>
   );
 };
