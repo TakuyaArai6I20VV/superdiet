@@ -13,6 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import { ProfileImage } from "./components/ProfileImage";
 const drawerWidth = 240;
 
 const theme = createTheme({
@@ -101,6 +102,7 @@ const Home = () => {
   <div>
     <main style={{ flexGrow: 1, padding: 3 }}>
       <Toolbar />
+      <ProfileImage />
         <Typography paragraph>
           <button>ログイン情報</button>
         </Typography>
