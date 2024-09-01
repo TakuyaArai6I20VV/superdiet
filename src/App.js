@@ -382,7 +382,7 @@ const Home = () => {
   // 生成ボタンが押されたときの処理
   const handleClick = async () => {
     const formData = new FormData();
-    formData.append("prompt", "make the person funny");
+    formData.append("prompt", "make the person in the picture more slim and look nice, losing fat and looking more attractive as human");
     formData.append("output_format", "jpeg");
     formData.append("mode", "image-to-image");
     formData.append("strength", "0.7");
