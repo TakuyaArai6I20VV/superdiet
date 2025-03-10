@@ -1,17 +1,14 @@
 # SuperDiet
 世の中の悩めるダイエッターたちを助けるためのWebアプリ
-<br >
-<img width="1400" alt="ホーム画面" src="">
 
 ## URL
-https:// <br >
 
 ## サービスの概要
 
 ## サービスを開発した背景
 
 ## 画面や機能の説明
-- 
+
 ## 使用技術
 - JavaScript
 - React
